@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- <TODO  corriger les défauts!
-      <TODO Souces d'images adaptés
-      <TODO Nettoyer le code
-                                                                           -->
 <!--**************************************************************************
 *                                                                            *
 *  Setting charset                                                           *
@@ -16,221 +12,29 @@
   <meta name="description" content="Udacity project 2: Portfolio">
   <meta name="author" content="Alain CADENAT">
   <meta name="mobile-web-app-capable" content="yes">
-
-<!--**************************************************************************
-*                                                                            *
-*  Linking to CSS file                                                       *
-*                                                                            *
-***************************************************************************-->
-
-  <link rel="stylesheet" href="css/styles.css" />
-
-
-<!--**************************************************************************
-*                                                                            *
-*  Setting viewport                                                          *
-*                                                                            *
-***************************************************************************-->
-
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-
-<!--**************************************************************************
-*                                                                            *
-*  Setting Tittle                                                            *
-*                                                                            *
-***************************************************************************-->
-
-  <title>Porfolio</title>
+  <title>FEND Projects</title>
 
 </head>
-<!--**************************************************************************
-*                                                                            *
-*               Udacity FEND Project #2: Portfolio                           *
-*                                                                            *
-*   A single webpage designed with HTML and CSS                              *
-*   The page is responsive and optimized for desktop, iPad and Nexus 5       *
-*   On the page we find:                                                     *
-*       - A fixed header with a logo, the name and position pof the author   *
-*       - An illustrating image                                              *
-*       - 1 featured project                                                 *
-*       - 4 recent project                                                   *
-*   Each project consist in a snapshot image and a caption with tittle and   *
-*   a link.                                                                  *
-*                                                                            *
-*   The html is structured as follow:                                        *
-*      - head                                                                *
-*        - body                                                              *
-*        - header                                                            *
-*        - main                                                              *
-*          - Illustration <figure>                                           *
-*          - Work <section>                                                  *
-*              - All projects <div>                                          *
-*                - Project 1 <figure>                                        *
-*                - Project 2 <figure>                                        *
-*                - Project 3 <figure>                                        *
-*                                                                            *
-*                                                                            *
-*   The projects presented here are projects I have already realized:        *
-*     Featured project is this one.                                          *
-*     Project 1 is the first one of FEND (trading card)                      *
-*     Project 2 is this project                                              *
-*     Project 3 is a website I made with WordPress                           *
-*                                                                            *
-***************************************************************************-->
+
 <body>
 
-<!--**************************************************************************
-*                                                                            *
-*  Setting the header for Name, Job and logo                                 *
-*                                                                            *
-***************************************************************************-->
-    <header>
-      <div id="name">
-        <h1>Alain CADENAT</h1>
-      </div>
-      <div id="job">
-        <h4>Nano Degree student</h4>
-      </div>
-    </header>
+  <h1>Udacity FEND Projects présentation</h1>
+  <p> Hi, I am Alain from France and I am currently folowing a Front End developer
+    Nano Degree (fend) scholarship With Udacity.
+    This page is designed to present the pojects I realize during the front end
+    developer scholarship of
+    <a href="https://udacity.com">Udacity</a>
+  </p>
 
-    <main class="content">
-
-      <section id="work">
-
-<!--**************************************************************************
-*                                                                            *
-*  Setting the block containing the illustration image                       *
-*                                                                            *
-***************************************************************************-->
-        <figure id="illustration">
-          <p class="responsive">Responsive design matters!<p>
-<!--       credit for responsive image:
-           https://pixabay.com/fr/sensible-illustration-page-seo-2044932/
-           responsive image loading the right size with srcset
-           For a real web site, the different sizes might not need so
-           many choices. Made only as it was a pratice exercice       -->
-          <img
-            class="img-illustration"
-            src="img/responsive_320.png"
-            srcset="img/responsive_110.png 110w,
-                    img/responsive_150.png 150w,
-                    img/responsive_165.png 165w,
-                    img/responsive_205.png 205w,
-                    img/responsive_320.png 320w"
-            sizes="(max-width: 380px) 110px,
-                   (max-width: 655px) 150px,
-                   (max-width: 768px) 165px,
-                   (max-width: 1024px) 205px,
-                   320px"
-            alt="Responsive design matters!">
-        </figure>
-
-<!--**************************************************************************
-*                                                                            *
-*  Setting a block for projects                                              *
-*                                                                            *
-***************************************************************************-->
-
-        <div id="project-all">
-          <div id="recent">
-            <h3>Recent Work</h3>
-          </div>
-<!--**************************************************************************
-*                                                                            *
-*  Setting blocks for each project                                           *
-*   Each project is descibed as a figure with:                               *
-*     - a snapshot img                                                       *
-*     - a figcaption with:                                                   *
-*       - a Tittle                                                           *
-*       - a link to GitHub or the Website                                    *
-*    <TODO> marge pour image du centre                                       *
-*                                                                            *
-***************************************************************************-->
-
-<!--  responsive image loading the right size with srcset
-      For a real web site, the different sizes might not need so
-      many choices. Made only beacuse it was a praticizing exercice        -->
-
-          <figure id="project-1" class="project">
-            <img
-              class="projectImg"
-              src="img/tradingcard_810.jpg"
-              srcset="img/tradingcard_365.jpg 365w,
-                      img/tradingcard_640.jpg 640w,
-                      img/tradingcard_605.jpg 605w,
-                      img/tradingcard_810.jpg 810w,
-                      img/tradingcard_430.jpg 430w"
-              sizes="(max-width: 380px) 365px,
-                     (max-width: 655px) 640px,
-                     (max-width: 768px) 605px,
-                     (max-width: 1024px) 810px,
-                     430px"
-              alt="Udacity fend project 1: Trading Card">
-            <figcaption>
-              <h2>Trading Card</h2>
-              <p><a href="https://github.com/Alain91530/trading-cards">Download sources</a></p>
-            </figcaption>
-          </figure>
-
-          <figure id="project-2" class="project">
-            <img
-              class="projectImg"
-              src="img/portfolio_640.jpg"
-              srcset="img/portfolio_365.jpg 365w,
-                      img/portfolio_640.jpg 640w,
-                      img/portfolio_605.jpg 605w,
-                      img/portfolio_405.jpg 810w,
-                      img/portfolio_430.jpg 430w"
-              sizes="(max-width: 380px) 365px,
-                     (max-width: 655px) 640px,
-                     (max-width: 768px) 605px,
-                     (max-width: 1024px) 810px,
-                     430px"
-              alt="Udacity fend project 2: portfolio">
-            <figcaption>
-              <h2>Portfolio</h2>
-              <p><a href="https://github.com/Alain91530/portfolio">Download sources</a></p>
-            </figcaption>
-          </figure>
-
-          <figure id="project-3" class="project">
-            <img
-            class="projectImg"
-            src="img/reinventer_810.jpg"
-              srcset="img/reinventer_365.jpg 365w,
-                      img/reinventer_640.jpg 640w,
-                      img/reinventer_605.jpg 605w,
-                      img/reinventer_405.jpg 810w,
-                      img/reinventer_430.jpg 430w"
-              sizes="(max-width: 380px) 365px,
-                     (max-width: 655px) 640px,
-                     (max-width: 768px) 605px,
-                     (max-width: 1024px) 810px,
-                     430px"
-            alt="Réinventer l'espace Website">
-            <figcaption>
-              <h2>Réinventer l'espace</h2>
-              <p><a href="https://reinventerlespace.archi">WordPress Website</a></p>
-            </figcaption>
-          </figure>
-
-      </div>
-    </section>
-
-  </main>
-  <footer>
-<!--**************************************************************************
-*                                                                            *
-*  Credit for social icons: https://simpleicons.org/    (CCO Licence         *
-*                                                                            *
-***************************************************************************-->
-    <div class="social-footer">
-      <a class="social" href="https://www.facebook.com/DEPAN.NUM"><img class="social-icons" src="img/facebook.svg" alt=""></a>
-      <a class="social" href="https://twitter.com/Depan_Num"><img class="social-icons" src="img/twitter.svg" alt=""></a>
-      <a class="social" href="https://plus.google.com/116754634481981947188"><img class="social-icons" src="img/googleplus.svg" alt=""></a>
-      <a class="social" href="https://github.com/Alain91530/portfolio"><img class="social-icons" src="img/github.svg" alt=""></a>
-    </div>
-  </footer>
+  <h3>To view a project just click on the link below<</h3>
+  <ul>
+    <li>
+      <a href="https://alain91530.github.io/trading-card/card.html">Project 1: Trading card<a>
+    </li>
+    <li>
+      <a href="https://alain91530.github.io/portfolio/index.html">Project 2: Portfolio<a>
+    </li>
+  </ul>
 
 </body>
-</html>
