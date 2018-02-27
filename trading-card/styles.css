@@ -1,0 +1,40 @@
+/* add your CSS here */
+/* Class for the Card*/
+.card {
+    width: 320px;
+    box-shadow: 7px 7px grey;
+    padding: 10px;
+    border: solid 2px white;
+    background-color: black;
+    color: white;
+}
+/* Class for animal's name */
+.animal {
+  text-align: left;
+  font-weight: bold;
+}
+/* Class for main fact */
+.fact {
+  font-style: italic;
+  text-align: center;
+}
+/* Class for animal's photo */
+.photo {
+  width: 300px;
+  padding: 10px;
+}
+/* Class for unbullet list */
+.list{
+  list-style: none;
+}
+/* Class for all the animal's infos */
+.infos{
+  width: 280px;
+  margin-left: 10px;
+  padding: 10px;
+  border: solid 1px grey;
+}
+/* Class for labels in the list */
+.label{
+  font-weight: bold;
+}
