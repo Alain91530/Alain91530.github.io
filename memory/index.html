@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!--
+                                                                           -->
+<!--**************************************************************************
+*                                                                            *
+*  Setting charset                                                           *
+*                                                                            *
+***************************************************************************-->
+
+  <meta charset="utf-8">
+
+  <meta name="description" content="Udacity project 2: Portfolio">
+  <meta name="author" content="Alain CADENAT">
+  <meta name="mobile-web-app-capable" content="yes">
+
+<!--**************************************************************************
+*                                                                            *
+*  Linking to CSS files:                                                     *
+*   - styles.css for the main design                                         *
+*   - anim.css for animations and modal popups                               *
+*                                                                            *
+***************************************************************************-->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/anim.css" />
+<!--**************************************************************************
+*                                                                            *
+*  Linking to Ubuntu Google font  and font-awesome font.                     *
+*                                                                            *
+***************************************************************************-->
+  <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+<!--**************************************************************************
+*                                                                            *
+*  favicon                                               *
+*                                                                            *
+***************************************************************************-->
+
+<link rel="icon" type="image/png" href="img/favicon.png" />
+
+<!--**************************************************************************
+*                                                                            *
+*  Setting viewport                                                          *
+*                                                                            *
+***************************************************************************-->
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+<!--**************************************************************************
+*                                                                            *
+*  Setting Tittle                                                            *
+*                                                                            *
+***************************************************************************-->
+
+  <title>Memory Game</title>
+
+</head>
+
+<!--**************************************************************************
+*                                                                            *
+*               Udacity FEND Project #3: Memory game                         *
+*                                                                            *
+*                                                                            *
+***************************************************************************-->
+<body>
+
+
+  <main>
+    <header>
+      <section id="game-title">
+        <h1>Memory Game</h1>
+      </section>
+      <div id="score">
+        <div id="stars" class="pannel">
+            <i class="fa fa-minus"></i>
+            <i class="fa fa-minus"></i>
+            <i class="fa fa-minus"></i>
+        </div>
+        <div id="moves" class="pannel">
+            Moves: 2
+        </div>
+        <div id="time" class="pannel">
+            00h03m42s
+        </div>
+      </div>
+      <section id="menu">
+        <div class="start-over clickable">
+            <span title="Start new game" class="button">New game</span>
+        </div>
+        <div title="Display the rules" id="rules" class="clickable">
+
+          <!-- Create an anchor to open a popup           -->
+
+          <a class="button" href="#openPopUp">How to play?</a>
+
+          <div title="" id="openPopUp" class="popUp">
+            <div>
+
+              <!-- Create an anchor to close the popup           -->
+
+              <a href="#close" title="Close" class="close">X</a>
+              <h2>Rules:</h2>
+              <p>The deck have 8 pairs of cards. Each card show an animal.
+                 You have to find all pairs in a limited number of moves.
+              </p>
+              <p>
+                Click on a card to see it's face, then click on a second card.
+                  This counts for one move. If the cards match, they stay face
+                   up. Otherwise cards flip back face down.
+              </p>
+              <p>A timer shows how long you have been playing. Clicking on the
+                 timer pauses the game.
+              </p>
+              <p>
+                You win when all cards are face up.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <div id="game">
+        <section id="deck">
+        <div class="card back">
+          <h2 class="picture">r</h2>
+        </div>
+        <div class="card matching">
+         <h2 class="picture">q</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">j</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">d</h2>
+        </div>
+        <div class="card matching">
+          <h2 class="picture">q</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">m</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">i</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">u</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">r</h2>
+        </div>
+        <div class="card notMatching">
+          <h2 class="picture">e</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">j</h2>
+        </div>
+        <div class="card notMatching">
+          <h2 class="picture">d</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">e</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">m</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">i</h2>
+        </div>
+        <div class="card back">
+          <h2 class="picture">u</h2>
+        </div>
+      </section>
+    </div>
+  </main>
+  <section id="end-game" class="hide">
+    <div id="message">
+      <div id="result">
+        <h2>Game over!!!</h2>
+      </div>
+      <div id="final-score">
+        <h3>Too many moves!</h3>
+          <img src="img/sad.svg" alt="sad face">
+      </div>
+    </div>
+    <div id="end-choice">
+      <div class="start-over end-menu clickable">
+        <span title="Start new game" class="end-button">Play again?</span>
+      </div>
+      <div class="stop end-menu clickable">
+        <span title="Stop playing" class="end-button">End game?</span>
+      </div>
+    </div>
+  </section>
+
+
+<!--**************************************************************************
+*                                                                            *
+* Linking to js file (at the en to be sure the DOM is loaded)                *
+*                                                                            *
+***************************************************************************-->
+
+  <script src="js/app.js"></script>
+
+</body>
+</html>

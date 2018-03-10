@@ -1,0 +1,193 @@
+/*******************************************************************************
+*		Font for the pictures on cards																						 *
+*******************************************************************************/
+@font-face {
+	font-family: "animals";
+	src: url('../fonts/animals.ttf');
+  /* Credit for font www.dafont.com */
+}
+/*******************************************************************************
+*		DOM's semantic elements																										 *
+*******************************************************************************/
+body {
+  background-image: url("../img/wood1.jpg");
+  /* Credit for background image
+     https://pixabay.com/fr/bois-patron-%C3%A9tage-texture-arbre-150384/ */
+
+	cursor: default;							 /* always an arrow on non clickable elements */
+
+  font-family: 'Ubuntu', sans-serif;
+	height: 100vh;
+	margin: 0;
+	display: flex;								 /* flexbox for responsiveness								*/
+	flex-wrap: wrap;
+}
+
+header {
+	border-width: 2px;
+	border-style: solid;
+  color: #310;
+  display: flex;
+  flex-flow: wrap;
+	font-size: 3vh;
+	justify-content: center;
+	min-height: 10%;
+  text-align: center;
+	order: 4;
+	max-width: 25%;
+}
+main {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 100%;
+}
+
+/*******************************************************************************
+*		Ids																																				 *
+*******************************************************************************/
+#deck {
+  align-self: center;
+  align-items: center;
+  background-image: linear-gradient(270deg, #BCAAA4, #3e2723 100%);
+  border-radius: 8px;
+  box-shadow: 15px 15px 3px #3E2723;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 3vh;
+  margin: auto;
+	/* Square responsive deck			*/
+  max-width: 41vw;
+  min-height: 41vw;
+}
+
+#game {
+	display: flex;
+	height: 94vh;
+	justify-content: center;
+	margin: 3vh 0 3vh 0;
+  width: 74%;
+}
+
+#game-title {
+	height: 0;
+}
+
+#menu {
+	display: flex;
+	flex-flow: wrap;
+	justify-content: center;
+	padding-top: 2%;
+}
+
+#moves {
+	width: 100%;
+}
+
+#score {
+	border-top-style: solid;
+	border-top-width: 2px;
+	display: flex;
+	flex-flow: wrap;
+	height: 20vh;
+	justify-content: center;
+	line-height: 10vh;
+	padding-top: 3vh;
+	width: 100%;
+}
+
+#time-left {
+  width: 33.33%
+}
+
+#stars {
+	color: grey;
+}
+
+/*******************************************************************************
+*		Classes																																		 *
+*******************************************************************************/
+
+.button {
+  background-color: #ff9800;
+  border-color: #310;
+  border-radius: 30px;
+  border-style: solid;
+	font-size: 4vh;
+  line-height: 2.5em;
+  padding: 0.5em;
+  text-decoration: none;
+	width: 80%;
+}
+
+.end-button {
+  background-color: #ff9800;
+  border-color: #310;
+  border-radius: 30px;
+  border-style: solid;
+  line-height: 2.5em;
+  padding: 0.5em;
+  text-decoration: none;
+	width: 20%;
+}
+
+.end-button:hover {
+	background-color: #ffe0b2;
+}
+
+.card {
+  color: brown;
+  font-family: "animals",sans-serif;
+  border-radius: 10px;
+  display: flex;
+	/* square cards with min size for small screens		*/
+  width: 9vw;
+  height: 9vw;
+	min-width: 48px;
+	min-height: 48px;
+}
+
+.clickable {
+  cursor: pointer;							/* Element is clickable												*/
+}
+
+.front {
+  background-color: orange;
+}
+
+.back {
+  background-image: url("../img/card.svg");
+  }
+
+.back > h2 {
+  visibility: hidden;
+}
+
+.matching {
+	background-color: lightgreen;
+}
+
+.notMatching {
+	background-color: #faa;
+}
+
+.pannel {
+  background-color: #ffca28;
+  border-color: #310;
+  border-style: solid;
+  line-height: 1.2em;
+  text-decoration: none;
+	height: 1em;
+    padding-bottom: .4em;
+    padding-top: .1em;
+		width: 100%;
+}
+
+.picture {
+  font-size: 5vw;
+	margin-top: 2.5vh;
+  text-align: center;
+  width: 100%;
+}
