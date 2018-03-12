@@ -12,7 +12,7 @@
 
   <meta charset="utf-8">
 
-  <meta name="description" content="Udacity project 2: Portfolio">
+  <meta name="description" content="Udacity project 3: Memory Game">
   <meta name="author" content="Alain CADENAT">
   <meta name="mobile-web-app-capable" content="yes">
 
@@ -67,7 +67,6 @@
 ***************************************************************************-->
 <body>
 
-
   <main>
     <header>
       <section id="game-title">
@@ -108,14 +107,23 @@
               </p>
               <p>
                 Click on a card to see it's face, then click on a second card.
-                  This counts for one move. If the cards match, they stay face
-                   up. Otherwise cards flip back face down.
+                This counts for one move. If the cards match, they stay face
+                up. Otherwise cards flip back face down.
               </p>
-              <p>A timer shows how long you have been playing. Clicking on the
-                 timer pauses the game.
+              <p>
+                A timer shows how long you have been playing. Clicking on the
+                timer pauses the game.
               </p>
               <p>
                 You win when all cards are face up.
+              </p>
+              <p>
+                Pressing the escape key will give you a hint, but you can't
+                have more than 3 hints per game.
+              </p>
+              <p>
+                Game is stored automatically and you can resume a game if you
+                close browser or browser's tab of the game.
               </p>
             </div>
           </div>
@@ -176,6 +184,7 @@
       </section>
     </div>
   </main>
+
   <section id="end-game" class="hide">
     <div id="message">
       <div id="result">
@@ -192,6 +201,21 @@
       </div>
       <div class="stop end-menu clickable">
         <span title="Stop playing" class="end-button">End game?</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="game-paused" class="hide">
+    <div id="pause">
+      <div id='pause-message'>
+        <h2>Game paused</h2>
+        <p id="game-saved">You have a previous game saved</p>
+      </div>
+    <div id="resume" class="clickable">
+        <span title="Resume" class="end-button">Resume</span>
+      </div>
+      <div id="restart" class="clickable">
+        <span title="New game" class="end-button">Restart</span>
       </div>
     </div>
   </section>
