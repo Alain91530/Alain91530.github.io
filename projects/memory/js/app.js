@@ -97,22 +97,22 @@ function changeTimer() {
 //  Adding a leading 0 if needed
 
   if (hrs<10) {
-    hrs = "0"+hrs+'h';
+    hrs = '0'+hrs+'h';
   }
   else {
-    hrs = hrs+"h";
+    hrs = hrs+'h';
   };
   if (mins<10) {
-    mins = "0"+mins+"m";
+    mins = '0'+mins+'m';
   }
   else {
-    mins = mins+"m";
+    mins = mins+'m';
   };
   if (secs<10) {
-    secs = "0"+secs+"s";
+    secs = '0'+secs+'s';
   }
   else {
-    secs = secs+"s";
+    secs = secs+'s';
   };
   timer++;
 
@@ -142,6 +142,10 @@ function changeTimer() {
 *******************************************************************************/
 
 function flipCard(card) {
+  // Start the timer if it's a new game
+  if (timerIntervalId === 0) {
+    timerIntervalId = window.setInterval(changeTimer, 1000);
+  }
   // Remove the change of cursor on facing up cards
   card.target.classList.toggle('clickable');
   // Check that the click was on a backside card
@@ -151,7 +155,7 @@ function flipCard(card) {
     card.target.classList.remove('back');
     // If the card is the 2nd of a move we need to increase the moves number
     if ((flips++)%2) {
-      moveScore.textContent = "Moves: "+(flips/2);
+      moveScore.textContent = 'Moves: '+(flips/2);
       displayStars();
       // Checking if it's a matching pair
       if (card.target.querySelector('h2').textContent==firstCard.querySelector('h2').textContent) {
@@ -277,24 +281,26 @@ function startGame(restore) {
    If it's a new game shuffle and set timer and moves to 0 and start it
    otherwise restore the game and put it in paused mode.                 */
 
-  if ((localStorage.getItem('saved')=="true")&&(restore)) {
+  if ((localStorage.getItem('saved')=='true')&&(restore)) {
     restoreGame();
-    moveScore.textContent = "Moves: "+Math.trunc(flips/2);
+    moveScore.textContent = 'Moves: '+Math.trunc(flips/2);
     displayStars();
+    /* If no flip was made during previous game no need to start in paused mode
+    just restart a new game waiting for first cards                             */
+    if (flips!=0) {
     document.getElementById('game-paused').classList.remove('hide');
+    }
+    else {
+      timer=0;
+    }
+    changeTimer();
   }
   else {
     storeGame();
     shuffleCards();
     timer = 0;
-    moveScore.textContent = "Moves: 0";
-    timerScore.textContent = "00h00m00s";
-    // Stop the timer if it isn't 1st of session, to avoid to have more than 1
-    if(timerIntervalId != 0) {
-      window.clearInterval(timerIntervalId);
-    };
-    // Start a timer each second pointing to the function wich increase time played
-      timerIntervalId = window.setInterval(changeTimer, 1000);
+    moveScore.textContent = 'Moves: 0';
+    timerScore.textContent = '00h00m00s';
   };
 
 /* Set an event on a click on timer  to pause the game.
@@ -390,29 +396,29 @@ function displayStars() {
 /*******************************************************************************
     End a game
     The function sets the html of the modal popup at the end of a game.
-    If "win" is true, the winning popup with score is set.
-    If "win" is false, the popup just show a sad emoji.
+    If win is true, the winning popup with score is set.
+    If win is false, the popup just show a sad emoji.
 *******************************************************************************/
 
 function endGame(win) {
   let winHtml;
   if (win) {
 // Setup a winning popup.
-    winHtml = "<h2>Well done!</h2>";
+    winHtml = '<h2>Well done!</h2>';
     document.getElementById('result').innerHTML = winHtml;
-    winHtml = "<h3>Done in "+document.getElementById('time').textContent+"</h3>";
-    winHtml = winHtml+"<h3> You made it in "+flips/2+" moves";
-    winHtml = winHtml+ "<h3>Your final score is </h3>";
+    winHtml = '<h3>Done in '+document.getElementById('time').textContent+'</h3>';
+    winHtml = winHtml+'<h3> You made it in '+flips/2+' moves';
+    winHtml = winHtml+ '<h3>Your final score is </h3>';
     winHtml = winHtml+document.getElementById('stars').innerHTML;
-    winHtml = winHtml+"<p><img class=\"emoji\" src=\"img/happy.svg\" alt=\"happy face\"></p>";
+    winHtml = winHtml+'<p><img class=\"emoji\" src=\"img/happy.svg\" alt=\"happy face\"></p>';
     document.getElementById('final-score').innerHTML = winHtml;
   }
 // Setup a loosing popup.
   else {
-    winHtml = "<h2>Game over!!!</h2>";
+    winHtml = '<h2>Game over!!!</h2>';
     document.getElementById('result').innerHTML = winHtml;
-    winHtml = "<h3>Too many moves!</h3>";
-    winHtml = winHtml+"<img src=\"img/sad.svg\" alt=\"sad face\">";
+    winHtml = '<h3>Too many moves!</h3>';
+    winHtml = winHtml+'<img src=\"img/sad.svg\" alt=\"sad face\">';
     document.getElementById('final-score').innerHTML = winHtml;
   };
 // Show the popup.
@@ -531,17 +537,18 @@ document.querySelector('.stop').addEventListener('click', function() {
 // Set events to resume or restart game after pausing by clicking on timer
 
 document.getElementById('resume').addEventListener('click', function(){
-  timerIntervalId = window.setInterval(changeTimer, 1000);
+  // check stored game really started or was just waiting for 1st card
+  if (flips!=0) {
+    timerIntervalId = window.setInterval(changeTimer, 1000);
+  };
   document.getElementById('game-paused').classList.add('hide');
-})
+});
 
 document.getElementById('restart').addEventListener('click', function(){
-  localStorage.saved = "false";
+  localStorage.saved = 'false';
   document.getElementById('game-paused').classList.add('hide');
   startGame(true);
-})
+});
 
-// If a game is stored, start it in paused mode
-if (localStorage.saved=="true") {
-  startGame(true);
-}
+/* If a game is stored restore it otherwise just wait for a card to be clicked          */
+startGame(localStorage.saved==='true');
