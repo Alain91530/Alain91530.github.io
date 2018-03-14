@@ -1,7 +1,19 @@
 /*******************************************************************************
 
-    Variables
+    Constants and variables
 *******************************************************************************/
+// Contants:
+// Differents stages of the game set as constants to be easy to change.
+
+const maxFlips = 32;
+const oneStar = 24;
+const twoStars = 16;
+
+// New game and restart button
+const play = document.getElementsByClassName('start-over');
+
+// Variables:
+
 let timer = 0;           // Number of seconds ellapsed playing a game
 let firstCard;           // Variable used to store the node of the first card
 let timerIntervalId = 0; // Store the value returned by setInterval
@@ -11,19 +23,15 @@ let hintLeft = 3;
 /*  Table containing the deck. It's filled with pairs of html elements
     representing the value of the eight pairs of different cards              */
 let deck = document.getElementsByClassName('picture');
+
 //  Table containing the complete html elements of the cards of the deck
 let cards = document.getElementsByClassName('card');
+
 //  Elements for the score board (time, moves and stars)
 let timerScore = document.getElementById('time');
 let moveScore = document.getElementById('moves');
 let stars = document.getElementsByClassName('fa');
 
-// Differents stages of the game set as constants to be easy to change.
-const maxFlips = 32;
-const oneStar = 24;
-const twoStars = 16;
-
-const play = document.getElementsByClassName('start-over');
 
 /*******************************************************************************
 
@@ -34,25 +42,22 @@ const play = document.getElementsByClassName('start-over');
 
     - changeTimer():
         called every second when game is started Add one second to timer,
-        format and Display ellaped time in score pannel.
+        format and Display ellaped time in score pannel. The timer is also used
+        to auto-store the game every second.
 
     - flipCard(card):
         Action: flip the clicked card and do all need checks accordind to the
         game logic (see comments before the function for details).
         Parameter: the DOM element clicked returned by the event.
 
-    - notMatchingCards(cardOne,cardTwo):
-        called to flip on the back side a non matching pair of cards. A time
-        count is needed in order to let the animation goes to its end.
-
-    - function hideHint(putItBack):
+    - hideHint(putItBack):
         Action: Put a card back face up after a hint. It's called by a timer
-        in order to give some delay to the player to see the hint. If hint are
+        in order to give some delay to the player to see the hint. If hint is
         still allowed, the proper event is added back.
         Parameter:
           putItBack: the DOM element of the card to be put back face up.
 
-    - function hint(e):
+    - hint(e):
         Action: fip a random back face card to front for 1 to 2 seconds to give
         a hint to player. On exit set a time out to hide the hint. Decrease the
         number of allowed hint.
@@ -60,7 +65,11 @@ const play = document.getElementsByClassName('start-over');
           e: keyboard event wich called it, used to retrieve the stroked key and
           display the hint or not.
 
-    - startGame():
+    - notMatchingCards(cardOne,cardTwo):
+        called to flip on the back side a non matching pair of cards. A time
+        count is needed in order to let the animation goes to its end.
+
+    - startGame(restore):
         Event listener for clicks on the play button in main window or in modal
         popup at the end of the game. It initialize everything to have a clean
         shuffled deck and then set up the logic of the game:
@@ -68,9 +77,13 @@ const play = document.getElementsByClassName('start-over');
             - Interval for the timer.
             - Event to pause the game on click of the timer.
             - Event to show a hint.
+        Parameter:
+          restore: boolean telling restoring game has to be done or not
+          if we enter the fonction from a click or a load of the game's page.
 
 /*******************************************************************************
-  Function called every second which format the string to display
+  Function called every second which format the string to display and store the
+  game in local storage.
 *******************************************************************************/
 
 function changeTimer() {
@@ -103,7 +116,7 @@ function changeTimer() {
   };
   timer++;
 
-// Change the DOM to display the timet value
+// Change the DOM to display the time value
 
   timerScore.textContent = hrs+mins+secs;
 
@@ -139,29 +152,19 @@ function flipCard(card) {
     // If the card is the 2nd of a move we need to increase the moves number
     if ((flips++)%2) {
       moveScore.textContent = "Moves: "+(flips/2);
-      // Then we check if the stars score needs to be changed
-      switch (flips) {
-        case twoStars: {
-          stars[2].classList.replace('fa-star','fa-minus');
-          break;
-        }
-        case oneStar: {
-          stars[1].classList.replace('fa-star','fa-minus');
-          break;
-        }
-        // we can't Stop the game now: it might be the last matching pair
-        case maxFlips: {
-          stars[0].classList.replace('fa-star','fa-minus');
-          break;
-        }
-      };
+      displayStars();
       // Checking if it's a matching pair
       if (card.target.querySelector('h2').textContent==firstCard.querySelector('h2').textContent) {
         card.target.classList.add('matching');
         firstCard.classList.add('matching')
-        // Checking if it's the las pair we need to win
+        // Checking if it's the last pair we need to win
         if (document.getElementsByClassName('matching').length==16){
           setTimeout(endGame(true),1700);
+        }
+        else {
+          if(flips==maxFlips){
+            setTimeout(endGame(false),1700);
+          };
         };
       }
       // Current pair doesn't match
@@ -178,37 +181,37 @@ function flipCard(card) {
           setTimeout(endGame(false),1700);
         };
       };
-
     }
     // It was the 1st card of a move just store it to be able to compare it to
     // next card flipped and toggle the cursor change on hover to not clickable
     else {
       firstCard = card.target;
+      // Store the index of firstCard in Cards conveted in an array first
+      localStorage.setItem('firstCard',Array.from(cards).indexOf(firstCard))
       card.target.classList.toggle('clickable');
     };
   };
 }
 
+
 /*******************************************************************************
-    Function to hide a hint avec a short delay
+    Function to hide a hint with a short delay.
     If the number max of hints is reached the event to display hints is not set
     again.
 *******************************************************************************/
 
 function hideHint(putItBack) {
-  for (let c=0; c<16; c++){
-    document.addEventListener('click',flipCard);
-    putItBack.classList.remove('front');
-    putItBack.classList.add('back');
-  }
+  makeCardsflippable(true);
+  putItBack.classList.remove('front');
+  putItBack.classList.add('back');
   if ((hintLeft)>0) {document.addEventListener('keydown',hint)};
 }
 
 /*******************************************************************************
-  Event listener on stroke of <esc> key
-  Flip a random card in thos which are still face down for 1 to 2 seconds
-  Cards are made unclickable during that (event removed, cursor change disable)
-  in order to avoid any problem in the game logic.
+    Event listener on stroke of <esc> key
+    Flip a random card in thos which are still face down for 1 to 2 seconds
+    Cards are made unclickable during that (event removed, cursor change disable)
+    in order to avoid any problem in the game logic.
 *******************************************************************************/
 
 function hint(e){
@@ -219,9 +222,7 @@ function hint(e){
     hintCard.classList.add('front');
     hintCard.classList.remove('back');
     document.removeEventListener('keydown',hint);
-    for (let c=0; c<16; c++){
-      document.removeEventListener('click', flipCard);
-    }
+    makeCardsflippable(false);
     hintLeft--;
     setTimeout(hideHint, 1000, hintCard);
   }
@@ -246,9 +247,10 @@ function notMatchingCards(cardOne,cardTwo){
 /*******************************************************************************
     Start the game:
       - Shuffle the deck
+      - Set event needed
       - Wait until a card is clicked
 *******************************************************************************/
-function startGame() {
+function startGame(restore) {
 
 // Reset the number of cards flipped
   flips = 0;
@@ -275,30 +277,35 @@ function startGame() {
    If it's a new game shuffle and set timer and moves to 0 and start it
    otherwise restore the game and put it in paused mode.                 */
 
-if (localStorage.getItem('saved')=="true") {
-  restoreGame();
-  document.getElementById('game-paused').classList.remove('hide')
-}
-else {
-  storeGame();
-  shuffleCards();
-  timer = 0;
-  moveScore.textContent = "Moves: 0";
-  timerScore.textContent = "00h00m00s";
-  // Stop the timer if it isn't 1st of session, to avoid to have more than 1
-  if(timerIntervalId != 0) {window.clearInterval(timerIntervalId);}
-  // Start a timer each second pointing to the function wich increase time played
-    timerIntervalId = window.setInterval(changeTimer, 1000);
-}
+  if ((localStorage.getItem('saved')=="true")&&(restore)) {
+    restoreGame();
+    moveScore.textContent = "Moves: "+Math.trunc(flips/2);
+    displayStars();
+    document.getElementById('game-paused').classList.remove('hide');
+  }
+  else {
+    storeGame();
+    shuffleCards();
+    timer = 0;
+    moveScore.textContent = "Moves: 0";
+    timerScore.textContent = "00h00m00s";
+    // Stop the timer if it isn't 1st of session, to avoid to have more than 1
+    if(timerIntervalId != 0) {
+      window.clearInterval(timerIntervalId);
+    };
+    // Start a timer each second pointing to the function wich increase time played
+      timerIntervalId = window.setInterval(changeTimer, 1000);
+  };
 
 /* Set an event on a click on timer  to pause the game.
    And and add clickable class to have a changing cusor hover                  */
 
   document.getElementById('time').addEventListener('click',function(){
-    window.clearInterval(timerIntervalId);
-    document.getElementById('game-paused').classList.remove('hide');
-    document.getElementById('game-saved').classList.add('hide');
-  });
+      window.clearInterval(timerIntervalId);
+      document.getElementById('game-paused').classList.remove('hide');
+      document.getElementById('game-saved').classList.add('hide');
+    }
+  );
   document.getElementById('time').classList.add('clickable');
 
 // Set an event to get a hint when <esc> is pressed.
@@ -313,26 +320,14 @@ else {
 
   makeCardsflippable(true);
 }
-function restoreGame() {
-  timer = localStorage.getItem('timer');
-  firstCard = localStorage.getItem('firstCard');
-  flips = localStorage.getItem('flips');
-  hintLeft = localStorage.getItem('hintLeft');
 
-  document.getElementById('deck').innerHTML = JSON.parse(localStorage.getItem('deck'));
-}
-
-function storeGame() {
-  localStorage.setItem('saved',true);
-  localStorage.setItem('timer', timer);
-
-  localStorage.setItem('flips',flips);
-  localStorage.setItem('hintLeft',hintLeft);
-
-  localStorage.setItem('deck',JSON.stringify(document.getElementById('deck').innerHTML));
-}
 /*******************************************************************************
   Functions to be called for repetitive actions of the logic of the Game
+
+    displayStars():
+    Action: Change the diplay of stars according to the number of moves. The
+    function is called by flipCard at each move (each 2 flips) and when the game
+    is restored.
 
     endGame(win):
       Action: modifify the DOM to display the end of game modal popup.
@@ -346,10 +341,51 @@ function storeGame() {
       Parameter: allowed
         Boolean, true the cards are clickble, false they aren't.
 
+    restoreGame():
+      Restore the game in the local storage. Local storage stores only strings
+      and data store are adapted to that. The structure of data store is:
+        - saved: 'true' if a game is saved, 'false' otherwise.
+        - timer: string whiche is diplayed by timer element.
+        - flips: flips variable conveted to string.
+        - hintLeft: hintLeft variable convetedto sting.
+        - deck: desk variable conveted to string using JSON.stringify.
+        - firstCard: value of this index of firstCard in cards converted to
+                     string.
+
     shuffleCards():
       generic function to shuffle any object which can be enumarated.
       algorythm was found on the net on several website.
+
+    storeGame():
+      Store the game in the local storage. See restoreGame() for a description
+      of the data.
+
 *******************************************************************************/
+
+/*******************************************************************************
+    Put stars display in accordance with moves number
+    *** 0 <= flips < twoStars
+    **- twoStars <= flips < oneStar
+    *-- oneStar <= flips < maxFlips
+    --- maxFlips = maxFlips
+*******************************************************************************/
+
+function displayStars() {
+    switch (flips) {
+      case twoStars: {
+        stars[2].classList.replace('fa-star','fa-minus');
+        break;
+      }
+      case oneStar: {
+        stars[1].classList.replace('fa-star','fa-minus');
+        break;
+      }
+      case maxFlips: {
+        stars[0].classList.replace('fa-star','fa-minus');
+        break;
+      }
+    };
+}
 
 /*******************************************************************************
     End a game
@@ -393,11 +429,12 @@ function endGame(win) {
 }
 
 /*******************************************************************************
-  Function for setting or unsetting event on clicks on cards accordind to
-  the phase of the game. The function is used to avoid clicks on cards during
-  animations.
-  If "allowed" is true thi envent is set on all cards of the deck.
-  If "allowed" is false the event is removed.
+    Function for setting or unsetting event on clicks on cards accordind to
+    the phase of the game. The function is used to avoid clicks on cards during
+    animations.
+    If "allowed" is true this event is set on all cards of the deck.
+    If "allowed" is false the event is removed. Function flipCard() will check if
+    a card is not already face up and do nothing in that case.
 *******************************************************************************/
 
 function makeCardsflippable(allowed) {
@@ -411,6 +448,19 @@ function makeCardsflippable(allowed) {
       cards[card].removeEventListener('click', flipCard);
     };
   }
+}
+
+/*******************************************************************************
+    Restore a former game when arriving to the game after a refresh or reopening
+    of the browser.
+*******************************************************************************/
+
+function restoreGame() {
+  timer = localStorage.getItem('timer');
+  flips = localStorage.getItem('flips');
+  hintLeft = localStorage.getItem('hintLeft');
+  document.getElementById('deck').innerHTML = JSON.parse(localStorage.getItem('deck'));
+  firstCard = cards[localStorage.getItem('firstCard')];
 }
 
 /*******************************************************************************
@@ -430,6 +480,22 @@ function shuffleCards() {
 }
 
 /*******************************************************************************
+    Store current game in local storage
+    firstcard isn't stored but only when it changes i.e. in the flipCard
+    function.
+    Note: This function is called a first time by startGame then every second by
+    changeTimer.
+*******************************************************************************/
+
+function storeGame() {
+  localStorage.setItem('saved',true);
+  localStorage.setItem('timer', timer);
+  localStorage.setItem('flips',flips);
+  localStorage.setItem('hintLeft',hintLeft);
+  localStorage.setItem('deck',JSON.stringify(document.getElementById('deck').innerHTML));
+}
+
+/*******************************************************************************
                         Main code for the game
 *******************************************************************************/
 
@@ -440,8 +506,12 @@ function shuffleCards() {
   new one.
 *******************************************************************************/
 
-play[0].addEventListener('click', startGame); // Event for the button in game
-play[1].addEventListener('click', startGame); // Event for the button in popup
+play[0].addEventListener('click', function() {
+  startGame(false);
+}); // Event for the button in game
+play[1].addEventListener('click', function() {
+  startGame(true);
+}); // Event for the button in popup
 
 /* Set the event to stop playing after a game. The function on this events
    remove the event on card's click and change the cursor on card's hover     */
@@ -468,10 +538,10 @@ document.getElementById('resume').addEventListener('click', function(){
 document.getElementById('restart').addEventListener('click', function(){
   localStorage.saved = "false";
   document.getElementById('game-paused').classList.add('hide');
-  startGame();
+  startGame(true);
 })
 
 // If a game is stored, start it in paused mode
 if (localStorage.saved=="true") {
-  startGame();
+  startGame(true);
 }

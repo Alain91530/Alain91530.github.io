@@ -1,3 +1,32 @@
+/*******************************************************************************
+
+    Common classes for all popups
+
+*******************************************************************************/
+
+.hide {
+	display: none;
+}
+
+.modal-popup {
+  cursor: default;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+}
+
+.popup-content {
+  display: flex;
+	flex-flow: wrap;
+  margin: 10% auto 3vh;
+	padding: 5px 20px 13px 20px;
+	border-radius: 10px;
+	background: linear-gradient(#fff, #d9bea6);
+
+}
 
 /*******************************************************************************
 
@@ -16,15 +45,7 @@
       - Black background with transparency
       - no effect on clicked                    */
 
-.popUp {
-  cursor: default;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: rgba(0,0,0,0.8);
-	z-index: 99999;       /* Put the popup on top */
+.pop-up {
 	opacity:0;            /* Hide popUp           */
 	transition: opacity 400ms ease-in;
   text-align: left;
@@ -34,14 +55,14 @@
 /*  Pseudo class to display the popup when link
     is clicked                                  */
 
-.popUp:target {
+.pop-up:target {
 	opacity:1;             /* Display popUp       */
 	pointer-events: all;  /* click action normal */
 }
 
 /*  Design of the text box                      */
 
-.popUp > div {
+.pop-up > div {
 	max-width: 70%;
 	position: relative;
 	margin: 10% auto;
@@ -78,27 +99,6 @@
 
 *******************************************************************************/
 
-#end-game {
-  cursor: default;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background: rgba(0,0,0,0.8);
-	z-index: 99999;       /* Put the popup on top */
-}
-
-#message {
-	display: flex;
-	flex-flow: wrap;
-  justify-content: center;
-	max-width: 70vw;
-	margin: 10% auto 3vh;
-	padding: 5px 20px 13px 20px;
-	border-radius: 10px;
-	background: linear-gradient(#fff, #d9bea6);
-}
 
 #end-choice {
   display: flex;
@@ -108,14 +108,24 @@
   width: 70vw;
 }
 
+
 #final-score {
   font-size: 0.7em;
   line-height: 0.5vw;
   text-align: center;
 }
 
-.hide {
-	display: none;
+#message {
+  justify-content: center;
+	max-width: 70vw;
+
+}
+
+#result {
+  cursor: default;
+  line-height: .1vw;
+  text-align: center;
+  width: 100%;
 }
 
 .emoji{
@@ -128,39 +138,21 @@
   width: 33%;
 }
 
-#result {
-  cursor: default;
-  line-height: .1vw;
-  text-align: center;
-  width: 100%;
-}
+
 /*******************************************************************************
 
     Modal popup when game is paused
 
 *******************************************************************************/
 
-#game-paused {
-  cursor: default;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0,0,0,0.8);
-  z-index: 99999;                   /* Put the popup on top */
-}
-
 #pause {
-  display: flex;
-  flex-flow: wrap;
   align-items: center;
   max-width: 45vw;
-  margin: 10% auto 3vh;
-  padding: 5px 20px 13px 20px;
-  border-radius: 10px;
-  background: linear-gradient(#fff, #d9bea6);
   text-align: center;
+}
+
+#pause-message {
+  width: 100%;
 }
 
 #game-saved {
@@ -176,9 +168,6 @@
 #restart {
   width: 50%;
   margin-bottom: 2vh;
-}
-#pause-message {
-  width: 100%;
 }
 /*******************************************************************************
 
@@ -237,13 +226,14 @@
 		margin-bottom: 1vh;
 	}
 
-  .popUp {
-    font-size: 0.8em;
-  }
-	.picture {
+  .picture {
     font-size: 4.5vh;
 		margin-top: 2vh;
 	}
+
+  .popUp {
+    font-size: 0.8em;
+  }
 }
 
 /*******************************************************************************
@@ -263,16 +253,16 @@
 	animation-name: flip;
 }
 
-@keyframes matchflip {
-	from {color: lightgreen;}
-  to {color: brown;}
-}
-
 /*******************************************************************************
 
 		keyframe animation for matching shuffleCards
 
 *******************************************************************************/
+
+@keyframes matchflip {
+	from {color: lightgreen;}
+  to {color: brown;}
+}
 
 .matching {
   animation-iteration-count: 1;
