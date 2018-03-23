@@ -8,14 +8,16 @@
 *******************************************************************************/
 class Game {
   constructor() {
+    // Tmer for the game
+    this.timer = 0;
     // Difficulty levels (0: easy to 3: difficult)
     this.level = 0;
     // Colors for level display in star menu
     this.levels = ['lightgreen','orange','red'];
     // Current sate of the game
     this.state = 'stopped';
-    // Object holding information to be displayed on the popup of the according
-    // state
+    // Array of objects holding information to be displayed on the popup
+    // of the according state
     this.allStates= [{state:'paused',
                       title:'GAME PAUSED',
                       text:'Hit the escape key again to resume'},
@@ -28,13 +30,13 @@ class Game {
                      {state: 'stopped',
                       title: 'CROSS THE ROAD!',
                       text: 'Hit space to start a new game'}];
-    // Images of all possible players character
+    // Array of mages of all possible players character
     this.players = ['images/char-boy.png',
                     'images/char-cat-girl.png',
                     'images/char-pink-girl.png',
                     'images/char-horn-girl.png',
                     'images/char-princess-girl.png'];
-    // Current player sprite used to let him change it
+    // Current player index sprite used to let him change it
     this.currentSprite = 0 ;
   }
 /*******************************************************************************
@@ -58,7 +60,7 @@ initGame() {
   initialized with yellow gem at gp[0], random number of green gems will be
   pushed later in the method.
   */
-  const gemPositions = [2]
+  const gemPositions = [2];
   // Number of gems for this game.
   const nbGems = random(4,8);
   // Usec to store x and y position in the canvas.
@@ -67,7 +69,7 @@ initGame() {
   /*
     Init all objects properties
   */
-  timer = 0;
+  this.timer = 0;
   this.state = 'stopped';
   /*
     Release previous instances of enemies and gems to be able to push new
@@ -87,13 +89,12 @@ initGame() {
   switch(this.level) {
     case 2: {
       maxBug = 3;
-      for (let i=0; i<random(1,maxBug); i++) {
+      for (let i=0; i<maxBug; i++) {
         allEnemies.push(new Enemy(random(501,650),
         yEnemiesPositions[random(0,2)],
         -random(40,120),
         'images/reverse-bug.png'));
-      }
-
+      };
     };
     case 1: {
       for (let i=0; i<random(3,maxBug); i++) {
@@ -121,7 +122,7 @@ initGame() {
   for (let i=1; i<15; i++) {
     (i<nbGems) ? gemPositions.push(1) : gemPositions.push(0);
   };
-// Shuffle gemPositions to get random gemPositions
+// Shuffle gemPositions to get random gem's positions
   for (let pos = gemPositions.length-1; pos > 0; pos--){
     // pick a random position on the grid
     let randomPos = Math.floor(Math.random()*(pos+1));
@@ -143,37 +144,30 @@ initGame() {
       case 1 : {
         allGems.push(new Gem(xGem,yGem,0,'green','images/Gem Green.png'));
         break;
-      }
-    }
-  }
+      };
+    };
+  };
   /*
     Reset the score on the screen.
   */
-  updateScore();
+  this.updateScore();
 }
 /*
   Method to change the state of the game according player's action
 */
   changeState(state) {
     this.state=state
-    switch (this.state) {
-      case 'lost':
-      case 'won':
-      case 'paused':
-      case 'stopped': {
-        for (let enemy of allEnemies) {
-         enemy.speed = 0;
-        };
-        break;
-      }
-      case 'running': {
-        for (let enemy of allEnemies) {
-          enemy.speed = enemy.speedStart;
-        };
-        break;
-      }
+    if (state=='running') {
+      for (let enemy of allEnemies) {
+        enemy.speed = enemy.speedStart;
+      };
     }
-  };
+    else {
+      for (let enemy of allEnemies) {
+       enemy.speed = 0;
+      };
+    };
+  }
 /*
    Methods to render the Game object according to its state. An empty popup is
    prepared and then the different contents of the popup are set according to
@@ -188,7 +182,7 @@ initGame() {
   render() {
     if (this.state!='running') {
       this.displayPopUp();
-      if (this.state=='stopped') {this.startMenu();};
+      (this.state=='stopped') ? this.startMenu() : this.displayEmoji(this.state);
     };
   }
 /*
@@ -207,10 +201,32 @@ initGame() {
     ctx.fillText(this.allStates[index].text,252,230);
   }
 /*
+Method to add an emoji to popup.
+*/
+  displayEmoji(state) {
+    let emoji;
+    switch (state) {
+      case 'paused' : {
+        emoji = 'images/wait.png';
+        break;
+      };
+      case 'won' : {
+        emoji = 'images/happy.png';
+        break;
+      }
+      case 'lost' : {
+        emoji = 'images/sad.png';
+        break;
+      }
+    };
+    ctx.drawImage(Resources.get(emoji), 205, 300);
+  }
+/*
    Method to add the sarting menu in the popup when game is stopped
 */
   startMenu() {
     ctx.fillText('Hit space to start a new game',252,230);
+    ctx.fillText('Esc pause/resume game',252,265);
     ctx.fillText('Use + key to set game difficulty',252,300);
     ctx.fillStyle = this.levels[this.level];
     ctx.arc(250,350,20,0,2*Math.PI);
@@ -226,9 +242,9 @@ initGame() {
     ctx.drawImage(Resources.get(player.sprite), 205, 395);
   }
 /*
-   Method to handle the allowed keys and change the game or pass the stroked key
-   to the Player's move(key) method to have it move. Called by the keystroke
-   event listener.
+   Method to handle the allowed keys and change the game state or pass the
+   stroked key to the Player's move(key) method to have it move. Called by the
+   keystroke event listener.
 */
   handleInput(key) {
     switch (key) {
@@ -264,8 +280,8 @@ initGame() {
       case 'level': {
         if (this.state=='stopped') {
           (this.level<2) ? this.level++ : this.level=0;
+          this.initGame();
         };
-        this.initGame();
         break;
       }
       // Not a game menu call the Player's method
@@ -274,7 +290,46 @@ initGame() {
       }
     }
   };
+  /*
+    Method updating the score (time, lives and diamond) called by the timer and
+    methods changing score like checkCollisions(). It changes part of the DOM
+    not managed by engine.js (i.e. the added score id node).
+  */
+  updateScore() {
+    let lives = document.getElementById('lives');
+    let stringTime;
+  /*
+    Update timer, display timer in hh:mm:ss format.
+  */
+    const hrs = Math.trunc(this.timer/3600);
+    const mins = (Math.trunc(this.timer/60)-(hrs*60));
+    const secs = (this.timer-((hrs*3600)+(mins*60)));
+    (hrs<10) ? stringTime = '0'+hrs+':' : stringTime = hrs+':';
+    (mins<10) ? stringTime = stringTime+'0'+mins+':' : stringTime = stringTime+mins+':';
+    (secs<10) ? stringTime = stringTime+'0'+secs : stringTime = stringTime+secs;
+    document.getElementById('time').textContent = stringTime;
+  /*
+    Update lives
+  */
+    while (lives.firstChild) {
+      lives.removeChild(lives.firstChild);
+    }
+    for(let nbLives = 0; nbLives<player.life; nbLives++ ) {
+      lives.innerHTML = lives.innerHTML+'<img src="images/Heart.png" height="70" alt="">';
+    }
+  /*
+    Updates gems
+  */
+    while (gems.firstChild) {
+      gems.removeChild(gems.firstChild);
+    }
+    for(let nbGems = 0; nbGems<player.gems; nbGems++ ) {
+      gems.innerHTML = gems.innerHTML+'<img src="images/Gem Green.png" height="50" alt=""><span> </span>';
+    }
+  };
 }
+
+
 /*******************************************************************************
     Character: super class of items of the game
     will be used to create enemies, gems and player classes
@@ -321,7 +376,8 @@ class Enemy extends Character {
    Move the enemy and then check for collision.
 */
   update(dt) {
-    (((this.speed>0)&&(this.x>505))||((this.speed<0)&&(this.x<-101))) ? this.x = this.xStart : this.x=this.x+(this.speed*dt);
+    (((this.speed>0)&&(this.x>505))||((this.speed<0)&&(this.x<-101))) ?
+     this.x = this.xStart : this.x=this.x+(this.speed*dt);
   }
 }
 /*******************************************************************************
@@ -370,7 +426,7 @@ class Player extends Character {
   update(dt) {
     this.checkCollisions();
     this.grabGems();
-    updateScore();
+    game.updateScore();
   };
 /*
   Method to handle the moves of player.
@@ -414,7 +470,7 @@ class Player extends Character {
     }
   }
 /*
-  Method to detect collisions
+  Method to detect collisions with enemies
 */
   checkCollisions() {
     for (let i=0; i<allEnemies.length; i++) {
@@ -434,7 +490,7 @@ class Player extends Character {
 }
 /*******************************************************************************
 
-          Generic utility functions for the game
+          Generic utility function for the game
 
 *******************************************************************************/
 /*
@@ -443,58 +499,13 @@ class Player extends Character {
 function random(min,max){
   return min+Math.floor(Math.random()*(max+2-(min+1)));
 }
-/*
-  Function updating the score (time, lives and diamond) called by the timer and
-  methods changing score like checkCollisions(). It changes the DOM not managed
-  by engine.js
-*/
-function updateScore() {
-  let lives = document.getElementById('lives');
-/*
-  Update timer
-*/
-  const hrs = Math.trunc(timer/3600);
-  const mins = (Math.trunc(timer/60)-(hrs*60));
-  const secs = (timer-((hrs*3600)+(mins*60)));
-  (hrs<10) ? stringTime = '0'+hrs+':' : stringTime = hrs+':';
-  (mins<10) ? stringTime = stringTime+'0'+mins+':' : stringTime = stringTime+mins+':';
-  (secs<10) ? stringTime = stringTime+'0'+secs : stringTime = stringTime+secs;
-  document.getElementById('time').textContent = stringTime;
-/*
-  Update lives
-*/
-  while (lives.firstChild) {
-    lives.removeChild(lives.firstChild);
-  }
-  for(let nbLives = 0; nbLives<player.life; nbLives++ ) {
-    lives.innerHTML = lives.innerHTML+'<img src="images/Heart.png" height="70" alt="">';
-  }
-/*
-  Updates gems
-*/
-  while (gems.firstChild) {
-    gems.removeChild(gems.firstChild);
-  }
-  for(let nbGems = 0; nbGems<player.gems; nbGems++ ) {
-    gems.innerHTML = gems.innerHTML+'<img src="images/Gem Green.png" height="50" alt=""><span> </span>';
-  }
-}
-/*
-  Function to handle the timer interval
-*/
-function changeTimer() {
-  (game.state=='running') ? timer+=1 : false;
-  updateScore();
-};
+
+
 /*******************************************************************************
 
           Global variables of the Game
 
 *******************************************************************************/
-/*
-  Timer to be displayed in the score pannel;
-*/
-let timer = 0;
 /*
   Hold and create the instance of the game
 */
@@ -502,7 +513,7 @@ let game = new Game;
 /*
   Hold the instance of player, will be initialized by Game.initGame() method.
 */
-let player;      // Default start position and null speed
+let player;
 /*
   Array which will hold the instances of enemies, will be initialized by
   Game.initGame() method.
@@ -523,8 +534,11 @@ let allGems = [];
 *******************************************************************************/
 // initialize the game object to start a new game
 game.initGame();
-// Set an interval and it's hander for the game's timer.
-window.setInterval(changeTimer, 1000);
+// Set an interval and it's handler for the game's timer.
+window.setInterval(function () {
+  (game.state=='running') ? game.timer+=1 : false;
+  game.updateScore();},
+  1000);
 /*
   This listens for key presses and sends the keys to Game.handleInput() method.
   The method will call Player.move(method) if the game is running to allow
