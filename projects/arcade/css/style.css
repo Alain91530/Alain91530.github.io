@@ -1,0 +1,28 @@
+body {
+  background-color: lightgrey;
+  font-size: 2em;
+  line-height: 0.5em;
+  text-align: center;
+}
+
+#score {
+  display: flex;
+  flex-flow: wrap;
+}
+
+#time {
+  width: 33.33%;
+}
+
+#lives {
+  width: 33.33%;
+}
+
+#gems {
+  width: 33.33%;
+}
+
+#rules {
+  font-size: 0.8em;
+  width: 100%
+}
