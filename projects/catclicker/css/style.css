@@ -11,6 +11,28 @@ main {
 header {
 /*  background-color: lightgrey; */
 }
+button {
+  height: 2em;
+  margin-bottom: 20px;
+}
+.hidden {
+  visibility: hidden;
+}
+.admin-zone {
+  display: flex;
+  flex-flow: wrap;
+}
+.adm-btn {
+  width: 100%;
+}
+.adm-input{
+  line-height: 2em;
+  text-align: right;
+  width: 50%
+}
+.validate {
+  width: 50%;
+}
 .cat-display {
   background-color: lightgrey;
   width: 80%;
@@ -30,4 +52,8 @@ header {
 }
 .nav-element {
   cursor: pointer;
+}
+.selected {
+  color: white;
+  background-color: black;
 }
